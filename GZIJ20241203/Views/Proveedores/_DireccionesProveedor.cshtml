@@ -1,0 +1,89 @@
+﻿@{
+    Layout = null;
+}
+@model IEnumerable<DireccionesProveedor>
+<input type="hidden" name="accion" value="@ViewBag.Accion" />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Direccion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ciudad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pais)
+            </th>
+            <th>
+                @if (ViewBag.Accion == "Create" || ViewBag.Accion == "Edit")
+                {
+                    <button type="submit" class="btn btn-primary" formaction="@Url.Action("AgregarDetalles")">Agregar</button>
+                }
+
+            </th>
+        </tr>
+
+    </thead>
+    <tbody>
+        @{
+            int index = -1;
+        }
+        @if (Model != null && Model.Count() > 0)
+        {
+            @foreach (var item in Model)
+            {
+                index++;
+                // var hidde = "table";
+                if (item.IdDireccion > -1)
+                {
+                    <tr>
+                        <td>
+                            <input type="hidden" value="@item.IdDireccion" name="DireccionesProveedor[@index].IdDireccion">
+                            <input type="hidden" value="@item.ProveedorId" name="DireccionesProveedor[@index].ProveedorId">
+                            <input class="form-control" data-readonly type="text" name="DireccionProveedor[@index].Direccion" value="@item.Direccion">
+                        </td>
+                        <td>
+                            <input class="form-control" data-readonly type="text" name="DireccionProveedor[@index].Ciudad" value="@item.Ciudad">
+                        </td>
+                        <td>
+                            <input class="form-control" data-readonly type="text" name="DireccionProveedor[@index].Pais" value="@item.Pais">
+                        </td>
+                        <td>
+                            @if (ViewBag.Accion == "Create" || ViewBag.Accion == "Edit")
+                            {
+                                <button name="index" value="@index" class="btn btn-primary" type="submit" formaction="@Url.Action("EliminarDetalles")">Eliminar</button>
+                            }
+
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr style="display:none">
+                        <td>
+                            <input type="hidden" value="@item.IdDireccion" name="DireccionProveedor[@index].IdDireccion">
+                            <input type="hidden" value="@item.ProveedorId" name="DireccionProveedor[@index].ProveedorId">
+                            <input type="hidden" name="DireccionProveedor[@index].Direccion" value="@item.Direccion">
+                            <input type="hidden" name="DireccionProveedor[@index].Ciudad" value="@item.Ciudad">
+                            <input type="hidden" name="DireccionProveedor[@index].Pais" value="@item.Pais">
+                        </td>
+                    </tr>
+                }
+            }
+        }
+
+    </tbody>
+</table>
+@if (ViewBag.Accion == "Details" || ViewBag.Accion == "Delete")
+{
+    <script>
+
+        const readOnly = document.querySelectorAll("*[data-readonly]");
+        for (var i = 0; i < readOnly.length; i++) {
+            const item = readOnly[i];
+            item.setAttribute("readonly",true);
+        }
+
+    </script>
+}
