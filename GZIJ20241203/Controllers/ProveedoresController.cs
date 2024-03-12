@@ -47,7 +47,16 @@ namespace GZIJ20241203.Controllers
         // GET: Proveedores/Create
         public IActionResult Create()
         {
-            return View();
+            var prov = new Proveedore();
+            prov.FechaRegistro = DateTime.Now;
+   
+            prov.DireccionesProveedors = new List<DireccionesProveedor>();
+            prov.DireccionesProveedors.Add(new DireccionesProveedor
+            {
+               
+            });
+            ViewBag.Accion = "Create";
+            return View(prov);
         }
 
         // POST: Proveedores/Create

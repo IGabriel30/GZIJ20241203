@@ -7,7 +7,7 @@ namespace GZIJ20241203.Models
     {
         public Proveedore()
         {
-            DireccionesProveedors = new HashSet<DireccionesProveedor>();
+            DireccionesProveedors = new List<DireccionesProveedor>();
         }
 
         public int IdProveedor { get; set; }
@@ -17,6 +17,6 @@ namespace GZIJ20241203.Models
         public string? Producto { get; set; }
         public DateTime? FechaRegistro { get; set; }
 
-        public virtual ICollection<DireccionesProveedor> DireccionesProveedors { get; set; }
+        public virtual IList<DireccionesProveedor> DireccionesProveedors { get; set; }
     }
 }
