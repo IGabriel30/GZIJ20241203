@@ -162,7 +162,7 @@ namespace GZIJ20241203.Controllers
                         d.IdDireccion = d.IdDireccion * -1;
                         var det = proveedorUpdate.DireccionesProveedors.FirstOrDefault(s => s.IdDireccion == d.IdDireccion);
                         _context.Remove(det);
-                        // facturaUpdate.DetFacturaVenta.Remove(det);
+                       
                     }
                 }
                 // Aplicar esos cambios a la base de datos
@@ -191,14 +191,15 @@ namespace GZIJ20241203.Controllers
                 return NotFound();
             }
 
-            var proveedore = await _context.Proveedores
+            var proveedor = await _context.Proveedores
+                .Include(s => s.DireccionesProveedors)
                 .FirstOrDefaultAsync(m => m.IdProveedor == id);
-            if (proveedore == null)
+            if (proveedor == null)
             {
                 return NotFound();
             }
-
-            return View(proveedore);
+            ViewBag.Accion = "Delete";
+            return View(proveedor);
         }
 
         // POST: Proveedores/Delete/5
@@ -210,12 +211,13 @@ namespace GZIJ20241203.Controllers
             {
                 return Problem("Entity set 'GZIJ20241203DbContext.Proveedores'  is null.");
             }
-            var proveedore = await _context.Proveedores.FindAsync(id);
+            var proveedore = await _context.Proveedores
+                .FindAsync(id);
             if (proveedore != null)
             {
                 _context.Proveedores.Remove(proveedore);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

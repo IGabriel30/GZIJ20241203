@@ -1,0 +1,22 @@
+CREATE DATABASE GZIJ20241203Db;
+
+USE GZIJ20241203Db;
+
+CREATE TABLE Proveedores (
+    IdProveedor INT PRIMARY KEY IDENTITY(1,1),
+    Nombre NVARCHAR(100) NOT NULL,
+    Telefono NVARCHAR(20),
+    CorreoElectronico NVARCHAR(100), -- Nueva columna para el correo electrónico 
+    Producto NVARCHAR(50), -- Nueva columna para la categoría de producto
+    FechaRegistro DATE, -- Nueva columna para la fecha de registro
+);
+
+CREATE TABLE DireccionesProveedor (
+    IdDireccion INT PRIMARY KEY IDENTITY(1,1),
+    ProveedorID INT NOT NULL,
+    Direccion NVARCHAR(200) NOT NULL,
+    Ciudad NVARCHAR(50),
+    Pais NVARCHAR(50),
+
+    FOREIGN KEY (ProveedorID) REFERENCES Proveedores(IdProveedor) ON DELETE CASCADE
+);
