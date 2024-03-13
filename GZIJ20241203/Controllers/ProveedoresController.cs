@@ -35,12 +35,13 @@ namespace GZIJ20241203.Controllers
             }
 
             var proveedore = await _context.Proveedores
+                    .Include(s => s.DireccionesProveedors)
                 .FirstOrDefaultAsync(m => m.IdProveedor == id);
             if (proveedore == null)
             {
                 return NotFound();
             }
-
+            ViewBag.Accion = "Details";
             return View(proveedore);
         }
 
@@ -101,11 +102,14 @@ namespace GZIJ20241203.Controllers
                     return NotFound();
                 }
 
-                var proveedore = await _context.Proveedores.FindAsync(id);
+                var proveedore = await _context.Proveedores
+                .Include(s => s.DireccionesProveedors)
+                .FirstAsync(s => s.IdProveedor == id); ;
                 if (proveedore == null)
                 {
                     return NotFound();
                 }
+                ViewBag.Accion = "Edit";
                 return View(proveedore);
             }
 
@@ -114,34 +118,69 @@ namespace GZIJ20241203.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdProveedor,Nombre,Telefono,CorreoElectronico,Producto,FechaRegistro")] Proveedore proveedore)
+        public async Task<IActionResult> Edit(int id, [Bind("IdProveedor,Nombre,Telefono,CorreoElectronico,Producto,FechaRegistro,DireccionesProveedors")] Proveedore proveedore)
         {
             if (id != proveedore.IdProveedor)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
+                // Obtener los datos de la base de datos que van a ser modificados
+                var proveedorUpdate = await _context.Proveedores
+                        .Include(s => s.DireccionesProveedors)
+                        .FirstAsync(s => s.IdProveedor == proveedore.IdProveedor);
+                proveedorUpdate.Nombre = proveedore.Nombre;
+               
+                proveedorUpdate.Telefono = proveedore.Telefono;
+                proveedorUpdate.CorreoElectronico = proveedore.CorreoElectronico;
+                proveedorUpdate.Producto = proveedore.Producto;
+                proveedorUpdate.FechaRegistro = proveedore.FechaRegistro;
+                // Obtener todos los detalles que seran nuevos y agregarlos a la base de datos
+                var detNew = proveedore.DireccionesProveedors.Where(s => s.IdDireccion == 0);
+                foreach (var d in detNew)
                 {
-                    _context.Update(proveedore);
-                    await _context.SaveChangesAsync();
+                    proveedorUpdate.DireccionesProveedors.Add(d);
                 }
-                catch (DbUpdateConcurrencyException)
+                // Obtener todos los detalles que seran modificados y actualizar a la base de datos
+                var detUpdate = proveedore.DireccionesProveedors.Where(s => s.IdDireccion > 0);
+                foreach (var d in detUpdate)
                 {
-                    if (!ProveedoreExists(proveedore.IdProveedor))
+                    var det = proveedorUpdate.DireccionesProveedors.FirstOrDefault(s => s.IdDireccion == d.IdDireccion);
+                    det.Direccion = d.Direccion;
+                    
+                    det.Ciudad = d.Ciudad;
+                    det.Pais = d.Pais;
+                }
+                // Obtener todos los detalles que seran eliminados y actualizar a la base de datos
+                var delDet = proveedore.DireccionesProveedors.Where(s => s.IdDireccion < 0).ToList();
+                if (delDet != null && delDet.Count > 0)
+                {
+                    foreach (var d in delDet)
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
+                        d.IdDireccion = d.IdDireccion * -1;
+                        var det = proveedorUpdate.DireccionesProveedors.FirstOrDefault(s => s.IdDireccion == d.IdDireccion);
+                        _context.Remove(det);
+                        // facturaUpdate.DetFacturaVenta.Remove(det);
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                // Aplicar esos cambios a la base de datos
+                _context.Update(proveedorUpdate);
+                await _context.SaveChangesAsync();
             }
-            return View(proveedore);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProveedoreExists(proveedore.IdProveedor))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Proveedores/Delete/5
