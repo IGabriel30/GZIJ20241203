@@ -75,7 +75,7 @@ namespace GZIJ20241203.Controllers
         }
         public ActionResult AgregarDetalles([Bind("IdProveedor,Nombre,Telefono,CorreoElectronico,Producto,FechaRegistro,DireccionesProveedors")] Proveedore proveedor, string accion)
         {
-            proveedor.DireccionesProveedors.Add(new DireccionesProveedor {  });
+            proveedor.DireccionesProveedors.Add(new DireccionesProveedor { });
             ViewBag.Accion = accion;
             return View(accion, proveedor);
         }
@@ -118,13 +118,9 @@ namespace GZIJ20241203.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdProveedor,Nombre,Telefono,CorreoElectronico,Producto,FechaRegistro,DireccionesProveedors")] Proveedore proveedore)
+        public async Task<IActionResult> Edit( [Bind("IdProveedor,Nombre,Telefono,CorreoElectronico,Producto,FechaRegistro,DireccionesProveedors")] Proveedore proveedore)
         {
-            if (id != proveedore.IdProveedor)
-            {
-                return NotFound();
-            }
-
+           
             try
             {
                 // Obtener los datos de la base de datos que van a ser modificados

@@ -4,10 +4,10 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Detalles</h1>
 
 <div>
-    <h4>Proveedore</h4>
+    <h4>Proveedores</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -46,6 +46,6 @@
     @await Html.PartialAsync("_DireccionesProveedor", Model.DireccionesProveedors)
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.IdProveedor">Edit</a> |
-    <a class="btn btn-secondary" asp-action="Index">Cancelar</a>
+    <a class="btn btn-outline-info" asp-action="Edit" asp-route-id="@Model?.IdProveedor">Editar</a> |
+    <a class="btn btn-outline-secondary" asp-action="Index">Cancelar</a>
 </div>
