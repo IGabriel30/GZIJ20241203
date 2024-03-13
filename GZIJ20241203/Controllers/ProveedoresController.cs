@@ -64,32 +64,50 @@ namespace GZIJ20241203.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdProveedor,Nombre,Telefono,CorreoElectronico,Producto,FechaRegistro")] Proveedore proveedore)
+        public async Task<IActionResult> Create([Bind("IdProveedor,Nombre,Telefono,CorreoElectronico,Producto,FechaRegistro,DireccionesProveedors")] Proveedore proveedore)
         {
-            if (ModelState.IsValid)
-            {
+            
                 _context.Add(proveedore);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
-            return View(proveedore);
+          ;
         }
-
-        // GET: Proveedores/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public ActionResult AgregarDetalles([Bind("IdProveedor,Nombre,Telefono,CorreoElectronico,Producto,FechaRegistro,DireccionesProveedors")] Proveedore proveedor, string accion)
         {
-            if (id == null || _context.Proveedores == null)
-            {
-                return NotFound();
-            }
-
-            var proveedore = await _context.Proveedores.FindAsync(id);
-            if (proveedore == null)
-            {
-                return NotFound();
-            }
-            return View(proveedore);
+            proveedor.DireccionesProveedors.Add(new DireccionesProveedor {  });
+            ViewBag.Accion = accion;
+            return View(accion, proveedor);
         }
+        public ActionResult EliminarDetalles([Bind("IdProveedor,Nombre,Telefono,CorreoElectronico,Producto,FechaRegistro,DireccionesProveedors")] Proveedore proveedor,
+           int index, string accion)
+        {
+            var det = proveedor.DireccionesProveedors[index];
+            if (accion == "Edit" && det.IdDireccion > 0)
+            {
+                det.IdDireccion = det.IdDireccion * -1;
+            }
+            else
+            {
+                proveedor.DireccionesProveedors.RemoveAt(index);
+            }
+            ViewBag.Accion = accion;
+            return View(accion, proveedor);
+        }
+            // GET: Proveedores/Edit/5
+            public async Task<IActionResult> Edit(int? id)
+            {
+                if (id == null || _context.Proveedores == null)
+                {
+                    return NotFound();
+                }
+
+                var proveedore = await _context.Proveedores.FindAsync(id);
+                if (proveedore == null)
+                {
+                    return NotFound();
+                }
+                return View(proveedore);
+            }
 
         // POST: Proveedores/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.

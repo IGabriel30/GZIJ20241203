@@ -39,15 +39,15 @@
                 {
                     <tr>
                         <td>
-                            <input type="hidden" value="@item.IdDireccion" name="DireccionesProveedor[@index].IdDireccion">
-                            <input type="hidden" value="@item.ProveedorId" name="DireccionesProveedor[@index].ProveedorId">
-                            <input class="form-control" data-readonly type="text" name="DireccionProveedor[@index].Direccion" value="@item.Direccion">
+                            <input type="hidden" value="@item.IdDireccion" name="DireccionesProveedors[@index].IdDireccion">
+                            <input type="hidden" value="@item.ProveedorId" name="DireccionesProveedors[@index].ProveedorId">
+                            <input class="form-control" data-readonly type="text" name="DireccionesProveedors[@index].Direccion" value="@item.Direccion">
                         </td>
                         <td>
-                            <input class="form-control" data-readonly type="text" name="DireccionProveedor[@index].Ciudad" value="@item.Ciudad">
+                            <input class="form-control" data-readonly type="text" name="DireccionesProveedors[@index].Ciudad" value="@item.Ciudad">
                         </td>
                         <td>
-                            <input class="form-control" data-readonly type="text" name="DireccionProveedor[@index].Pais" value="@item.Pais">
+                            <input class="form-control" data-readonly type="text" name="DireccionesProveedors[@index].Pais" value="@item.Pais">
                         </td>
                         <td>
                             @if (ViewBag.Accion == "Create" || ViewBag.Accion == "Edit")
@@ -62,11 +62,11 @@
                 {
                     <tr style="display:none">
                         <td>
-                            <input type="hidden" value="@item.IdDireccion" name="DireccionProveedor[@index].IdDireccion">
-                            <input type="hidden" value="@item.ProveedorId" name="DireccionProveedor[@index].ProveedorId">
-                            <input type="hidden" name="DireccionProveedor[@index].Direccion" value="@item.Direccion">
-                            <input type="hidden" name="DireccionProveedor[@index].Ciudad" value="@item.Ciudad">
-                            <input type="hidden" name="DireccionProveedor[@index].Pais" value="@item.Pais">
+                            <input type="hidden" value="@item.IdDireccion" name="DireccionesProveedors[@index].IdDireccion">
+                            <input type="hidden" value="@item.ProveedorId" name="DireccionesProveedors[@index].ProveedorId">
+                            <input type="hidden" name="DireccionesProveedors[@index].Direccion" value="@item.Direccion">
+                            <input type="hidden" name="DireccionesProveedors[@index].Ciudad" value="@item.Ciudad">
+                            <input type="hidden" name="DireccionesProveedors[@index].Pais" value="@item.Pais">
                         </td>
                     </tr>
                 }
